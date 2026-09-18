@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import { getFileUrl } from "../types/file.ts";
+
 import type { Message } from "../types/message.ts";
 
 defineProps<{
@@ -16,9 +18,27 @@ defineProps<{
         'message--other': !isOwn,
       }"
   >
-    <p>
+    <p
+      v-if="
+        message.type==='text'
+      "
+    >
       {{message.body}}
     </p>
+
+    <img
+        v-if="
+          message.type === 'image'
+          &&
+          message.attachment
+        "
+        class="message-image"
+        :src="
+          getFileUrl(
+            message.attachment
+          )
+        "
+    />
     <footer>
             <span>
               {{ message.author}}
@@ -34,6 +54,13 @@ defineProps<{
 </template>
 
 <style scoped>
+
+.message-image{
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 12px;
+  object-fit: cover;
+}
 
 .message{
   max-width: 70%;

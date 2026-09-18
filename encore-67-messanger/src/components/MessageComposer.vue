@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import {ref} from "vue";
 
+import { open } from "@tauri-apps/plugin-dialog";
+
+import { invoke } from "@tauri-apps/api/core";
 
 // defineEmits - сообщает vue, какие из событий, данный
 // компонент имеет право рассылать
 const emit = defineEmits<{
   send: [body:string];
+  sendImage: [path:string];
 }>();
 
 const draft = ref("");
@@ -21,6 +25,47 @@ function submitMessage(){
   // После отправки очищаем поле ввода
   draft.value = "";
 }
+
+async function selectImage(){
+  const file = await open({
+    multiple: false,
+
+    filters:[
+      {
+        name:"Image",
+        extensions:[
+            "png",
+            "jpg",
+            "jpeg",
+            "webp",
+            "gif"
+        ]
+      }
+    ]
+  });
+
+  console.log(file)
+
+  if(!file){
+    return;
+  }
+
+  const savedPath =
+      await invoke<string>(
+          "save_attachment",
+          {
+            source:file
+          }
+      );
+
+  // console.log(savedPath)
+
+  emit(
+      "sendImage",
+      savedPath
+  )
+
+}
 </script>
 
 <template>
@@ -28,6 +73,13 @@ function submitMessage(){
       class="composer"
       @submit.prevent="submitMessage"
   >
+    <button
+      type="button"
+      class="image-button"
+      @click="selectImage"
+    >
+      📎
+    </button>
     <input
         v-model="draft"
         type="text"
@@ -40,6 +92,19 @@ function submitMessage(){
 
 <style scoped>
 
+.image-button{
+  width: 42px;
+  height: 42px;
+  border: 1px solid #343842;
+  border-radius: 8px;
+  background: #20232a;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.image-button:hover{
+  background: #292c34;
+}
 .composer{
   display: flex;
   gap: 10px;

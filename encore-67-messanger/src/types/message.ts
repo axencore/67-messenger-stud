@@ -3,6 +3,8 @@
 export interface Message{
     id: number;
     author: string;
-    body: string;
+    type: "text" | "image";
+    body: string | null;
+    attachment: string | null;
     created_at: string;
 }
