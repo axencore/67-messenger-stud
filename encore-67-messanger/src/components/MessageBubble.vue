@@ -41,7 +41,7 @@ defineProps<{
     />
     <footer>
             <span>
-              {{ message.author}}
+              {{ message.author_name }}
             </span>
       <span>
               |
