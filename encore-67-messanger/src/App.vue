@@ -278,10 +278,10 @@ onMounted(async()=>{
       />
       <section class="chat">
         <template v-if="activeChat">
-          <ChatInfo
+        <!--<ChatInfo
             :title="activeChat.title"
             :subtitle="activeChat.subtitle"
-          />
+          />-->
           <MessageList
               :key="activeChat.id"
               :messages="messages"

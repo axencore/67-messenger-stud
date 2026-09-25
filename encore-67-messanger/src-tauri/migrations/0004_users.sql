@@ -45,7 +45,7 @@ INSERT OR IGNORE INTO users (
 SELECT
     -- Техничкеский username legacy_1 legacy_2 ....
     -- CAST превращает число в текст
-    'legacy_' || CAST(old_authors.first_message_id AS TEXT)
+    'legacy_' || CAST(old_authors.first_message_id AS TEXT),
     old_authors.author
 FROM (
     SELECT
